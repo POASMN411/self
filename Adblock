@@ -1,0 +1,97 @@
+#!name=自用广告拦截合集
+#!desc=包含 猫耳FM   淘宝  京东  番茄小说  哔哩哔哩（不包括漫画） youtube 
+
+
+# >>>>>>>>>>>>>>> ✅ M ✅ <<<<<<<<<<<<<<
+# > 猫耳FM
+# hostname = app.missevan.com
+# 开屏广告 感谢【可莉🅥】分享
+^https?:\/\/app\.missevan\.com\/site\/launch\? url reject
+
+
+# >>>>>>>>>>>>>>> ✅ T ✅ <<<<<<<<<<<<<<
+# > 淘宝
+# hostname = acs.m.taobao.com, guide-acs.m.taobao.com, poplayer.template.alibaba.com
+^https?:\/\/acs\.m\.taobao\.com\/gw\/mtop\.alibaba\.advertisementservice\.getadv url reject-dict
+^https?:\/\/acs\.m\.taobao\.com\/gw\/mtop\.alimama\.etao\.config\.query\/.+?etao_advertise url reject-dict
+^https?:\/\/acs\.m\.taobao\.com\/gw\/mtop\.alimusic\.common\.mobileservice\.startinit url reject-dict
+^https?:\/\/acs\.m\.taobao\.com\/gw\/mtop\.etao\.noah\.query\/.+tao_splash url reject-dict
+^https?:\/\/acs\.m\.taobao\.com\/gw\/mtop\.film\.mtopadvertiseapi\.queryadvertise url reject-dict
+^https?:\/\/acs\.m\.taobao\.com\/gw\/mtop\.o2o\.ad\.gateway\.get url reject-dict
+^https?:\/\/acs\.m\.taobao\.com\/gw\/mtop\.taobao\.idle\.home\.welcome url reject-dict
+^https?:\/\/acs\.m\.taobao\.com\/gw\/mtop\.trip\.activity\.querytmsresources url reject-dict
+^https?:\/\/guide-acs\.m\.taobao\.com\/gw\/mtop\.taobao\.(volvo\.secondfloor\.getconfig|wireless\.home\.newface\.awesome\.get) url reject-dict
+^https?:\/\/guide-acs\.m\.taobao\.com\/gw\/mtop\.taobao\.(cloudvideo\.video\.query|wireless\.home\.splash\.awesome\.get) url script-response-body https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/myBlockAds.js
+^https?:\/\/poplayer\.template\.alibaba\.com\/\w+\.json url script-response-body https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/myBlockAds.js
+
+
+# >>>>>>>>>>>>>>> ✅ J ✅ <<<<<<<<<<<<<<
+# > 京东
+# hostname = api.m.jd.com, dns.jd.com
+^https:\/\/api\.m\.jd\.com\/client\.action\?functionId=(deliverLayer|getTabHomeInfo|myOrderInfo|orderTrackBusiness|personinfoBusiness|start|welcomeHome) url script-response-body https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/jingdong/jingdong.js
+# 禁京东直播小窗
+^https?:\/\/api\.m\.jd\.com\/client\.action\?functionId=getWidgetV1052 url reject
+
+
+# >>>>>>>>>>>>>>> ✅ F ✅ <<<<<<<<<<<<<<
+# > 番茄小说
+# hostname = *.pangolin-sdk-toutiao.com, *.pangolin-sdk-toutiao.*, *.pstatp.com, *.pstatp.com.*, *.pglstatp-toutiao.com.*, *.pglstatp-toutiao.com, gurd.snssdk.com, gurd.snssdk.com.*, i-lq.snssdk.com, i-lq.snssdk.com.*, *default.ixigua.com
+# 去章末广告
+^https?:\/\/.+\.pangolin-sdk-toutiao\.com\/api\/ad\/union\/sdk\/(get_ads|stats|settings)\/ url reject
+^https?:\/\/.+\.pglstatp-toutiao\.com\/.+\/toutiao\.mp4 url reject
+^https?:\/\/.+\.(pglstatp-toutiao|pstatp)\.com\/(obj|img)\/(ad-app-package|ad)\/.+ url reject
+^https?:\/\/.+\.(pglstatp-toutiao|pstatp)\.com\/(obj|img)\/web\.business\.image\/.+ url reject
+^https?:\/\/.+\.(pglstatp-toutiao|pstatp)\.com\/obj\/ad-pattern\/renderer url reject
+^https?:\/\/gurd\.snssdk\.com\/src\/server\/v3\/package url reject
+^https?:\/\/.+\.byteimg\.com\/tos-cn-i-1yzifmftcy\/(.+)-jpeg\.jpeg url reject
+^https?:\/\/.+\.pstatp\.com\/obj\/mosaic-legacy\/.+\?from\=ad url reject
+^https?:\/\/.+\.pstatp\.com\/bytecom\/resource\/track_log\/src\/.+ url reject
+^https?:\/\/.+\.snssdk\.com\/video\/play\/1\/toutiao\/.+\/mp4 url reject
+^https?:\/\/.+\.snssdk\.com\/api\/ad\/.+ url reject
+^https?:\/\/.+\.byteimg\.com\/ad-app-package url reject
+^https?:\/\/.+\.byteimg\.com\/web\.business\.image url reject
+
+
+# >>>>>>>>>>>>>>> ✅ B ✅ <<<<<<<<<<<<<<
+# > 哔哩哔哩
+# hostname = app.bilibili.com, api.bilibili.com, api.live.bilibili.com, grpc.biliapi.net
+# Proto 动态广告,后台播放限制,播放页广告 //app.bilibili.com
+# ^https?:\/\/(app\.bilibili\.com|grpc\.biliapi\.net)\/bilibili\.app\.dynamic\.v2\.Dynamic\/DynAll url script-response-body https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/bilibili/protoA.js
+# ^https?:\/\/(app\.bilibili\.com|grpc\.biliapi\.net)\/bilibili\.app\.interface\.v1\.Teenagers\/ModeStatus url script-response-body https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/bilibili/protoA.js
+# ^https?:\/\/(app\.bilibili\.com|grpc\.biliapi\.net)\/bilibili\.app\.(view|viewunite)\.v1\.View\/(View|ViewProgress) url script-response-body https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/bilibili/protoA.js
+# ^https?:\/\/(app\.bilibili\.com|grpc\.biliapi\.net)\/bilibili\.community\.service\.dm\.v1\.DM\/DmView url script-response-body https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/bilibili/protoA.js
+# ^https?:\/\/(app\.bilibili\.com|grpc\.biliapi\.net)\/bilibili\.main\.community\.reply\.v1\.Reply\/MainList url script-response-body https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/bilibili/protoA.js
+# ^https?:\/\/(app\.bilibili\.com|grpc\.biliapi\.net)\/bilibili\.polymer\.app\.search\.v1\.Search\/SearchAll url script-response-body https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/bilibili/protoA.js
+# 观影页,直播间商品广告浮窗,搜索框填充词,首页信息流,热搜发现,右上角活动,标签页
+# ^https?:\/\/api\.bilibili\.com\/pgc\/page\/(bangumi|cinema\/tab\?) url script-response-body https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/bilibili/json.js
+# ^https?:\/\/api\.live\.bilibili\.com\/xlive\/app-room\/v1\/index\/getInfoByRoom\? url script-response-body https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/bilibili/json.js
+# ^https?:\/\/api\.live\.bilibili\.com\/xlive\/e-commerce-interface\/v1\/ecommerce-user\/get_shopping_info\? url reject-dict
+# ^https?:\/\/(app\.bilibili\.com|grpc\.biliapi\.net)\/bilibili\.app\.interface\.v1\.Search\/DefaultWords url reject-dict
+# ^https?:\/\/app\.bilibili\.com\/x\/v2\/(feed\/index(\/story)?|search\/square)\? url script-response-body https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/bilibili/json.js
+# ^https?:\/\/app\.bilibili\.com\/x\/resource\/(top\/activity|show\/tab\/v2)\? url script-response-body https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/bilibili/json.js
+# 满意度调研
+# ^https?:\/\/api\.bilibili\.com\/x\/v2\/dm\/qoe\/show\? url reject-dict
+# 开屏广告 //app.bilibili.com
+# ^https?:\/\/[\d\.]+:8000\/v1\/resource\/\w{32}-1-SPLASH url reject-dict
+# ^https?:\/\/upos-sz-static\.bilivideo\.com\/ssaxcode\/\w{2}\/\w{2}\/\w{32}-1-SPLASH url reject-dict
+# ^https?:\/\/api\.bilibili\.com\/x\/mengqi\/v1\/resource\? url reject-dict
+# ^https?:\/\/app\.bilibili\.com\/x\/v2\/splash\/(brand\/list|event\/list2|list|show)\? url script-response-body https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/bilibili/json.js
+# 我的页面 解锁1080P高码率,4K画质,皮肤推送 //app.bilibili.com
+# ^https?:\/\/app\.bilibili\.com\/x\/v2\/account\/(mine(\/ipad)?|myinfo)\? url script-response-body https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/bilibili/json.js
+# ^https?:\/\/app\.bilibili\.com\/x\/resource\/show\/skin\? url script-response-body https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/bilibili/json.js
+# IP请求,地理位置请求 //api.bilibili.com
+# ^https?:\/\/api\.bilibili\.com\/x\/web-interface\/zone\?jsonp url reject-dict
+# ^https?:\/\/app\.bilibili\.com\/x\/resource\/ip url reject-dict
+
+
+# >>>>>>>>>>>>>>> ✅ Y ✅ <<<<<<<<<<<<<<
+# > YouTube
+# hostname = rr*.googlevideo.com, youtubei.googleapis.com
+# 响应体
+^https:\/\/youtubei\.googleapis\.com\/youtubei\/v1\/(browse|next|player|search|reel\/reel_watch_sequence|guide|account\/get_setting|get_watch) url script-response-body https://raw.githubusercontent.com/Maasea/sgmodule/refs/heads/master/Script/Youtube/youtube.response.js
+# 播放页广告
+^https:\/\/rr[\w-]+\.googlevideo\.com\/initplayback\? url reject-dict
+
+
+# 去重后的hostname，将对以下域名进行MITM（MAN-IN-THE-MIDDLE：中间人攻击）
+hostname = *.default.ixigua.com, *.pangolin-sdk-toutiao.com, *.pglstatp-toutiao.com, *.pstatp.com, acs.m.taobao.com, api.bilibili.com, api.live.bilibili.com, api.m.jd.com, app.bilibili.com, app.missevan.com, dns.jd.com, grpc.biliapi.net, guide-acs.m.taobao.com, gurd.snssdk.com, i-lq.snssdk.com, poplayer.template.alibaba.com, rr*.googlevideo.com, youtubei.googleapis.com
