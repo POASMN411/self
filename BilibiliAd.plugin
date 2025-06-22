@@ -1,3 +1,6 @@
+#!name=Bilibili去广告
+
+
 [Argument]
 # > 哔哩哔哩
 bilibili_enable = switch,true,false,tag=哔哩哔哩-脚本开关
