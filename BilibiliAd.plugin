@@ -45,4 +45,4 @@ http-request ^https:\/\/(?:grpc\.biliapi\.net|app\.bilibili\.com)\/bilibili\.com
 http-response ^https:\/\/(?:grpc\.biliapi\.net|app\.bilibili\.com)\/bilibili\.(?:app\.(?:show\.v1\.Popular\/Index|dynamic\.v2\.Dynamic\/DynAll|view(?:unite)?\.v1\.View\/(?:View|ViewProgress|RelatesFeed)|playurl\.v1\.PlayURL\/PlayView|playerunite\.v1\.Player\/PlayViewUnite)|polymer\.app\.search\.v1\.Search\/SearchAll|community\.service\.dm\.v1\.DM\/DmView|main\.community\.reply\.v1\.Reply\/MainList|pgc\.gateway\.player\.v2\.PlayURL\/PlayView)$ script-path=https://raw.githubusercontent.com/kokoryh/Sparkle/refs/heads/master/dist/bilibili.protobuf.js, argument=[{showUpList}, {filterTopReplies}, {airborneDm}], requires-body=true, binary-body-mode=true, tag=bilibili.protobuf
 
 [MITM]
-hostname = api.biliapi.com,app.biliapi.com,api.biliapi.net,app.biliapi.net,app.bilibili.com,api.bilibili.com,api.live.bilibili.com,grpc.biliapi.net,upos-sz-static.bilivideo.com
+hostname = api.biliapi.com, app.biliapi.com, api.biliapi.net, app.biliapi.net, app.bilibili.com, api.bilibili.com, api.live.bilibili.com, grpc.biliapi.net, upos-sz-static.bilivideo.com
