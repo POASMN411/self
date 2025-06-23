@@ -1,59 +1,93 @@
---- START OF FILE blockAds_selected.plugin.txt ---
 
-#!name=精简广告拦截合集
-#!desc=(支持猫耳FM, 哔哩哔哩(不含动漫), 京东, 淘宝, 番茄小说)针对部分APP和小程序广告进行拦截。
-#!rule-details=猫耳FM, 哔哩哔哩, 京东, 淘宝, 番茄小说
-#!author=AI Helper (基于奶思fmz200规则精简)
-#!icon=https://raw.githubusercontent.com/fmz200/wool_scripts/main/icons/apps/AdblockPlus.png
-#!homepage=https://github.com/fmz200/wool_scripts
-#!raw-url=https://github.com/your-repo/your-path/blockAds_selected.plugin.txt
-#!tg-group=https://t.me/lanjieguanggao
-#!category=精简模块
-#!tag=去广告, AI, 精简
-#!system=iOS, iPadOS
-#!system_version = 
-#!loon_version = 
-#!date=2024-07-30 10:00:00
-#!remark=此为原“广告拦截&净化合集”插件的精简版本，仅包含猫耳FM, 哔哩哔哩 (不含动漫), 京东, 淘宝, 和番茄小说的去广告规则。需要开启MITM。
-#############################################
-# "reject"        策略返回 HTTP 状态码 404,不附带任何额外内容
-# "reject-200"    策略返回 HTTP 状态码 200,不附带任何额外内容
-# "reject-img"    策略返回 HTTP 状态码 200,同时附带 1px gif
-# "reject-dict"   策略返回 HTTP 状态码 200,同时附带一个空的 JSON 对象
-# "reject-array"  策略返回 HTTP 状态码 200,同时附带一个空的 JSON 数组
-#############################################
+
+#!name=广告拦截&净化合集
+
 
 [Argument]
-# > 哔哩哔哩 (Bilibili)
+# > 哔哩哔哩
 bilibili_enable = switch,true,false,tag=哔哩哔哩-脚本开关
 showUpList=select,"auto","true","false",tag=哔哩哔哩-[动态]中[最常访问]的显示方式,desc=true: 始终显示\n- false: 始终隐藏\n- auto: 仅当列表中存在直播状态时显示
 filterTopReplies=switch,true,tag=哔哩哔哩-[评论区]过滤置顶评论广告,desc=true: 开启\n- false: 关闭
 airborne=switch,true,tag=哔哩哔哩-空降助手,desc=true: 开启\n- false: 关闭
 airborneDm=switch,false,tag=哔哩哔哩-空降助手弹幕版(仅限Ipad开启),desc=true: 开启\n- false: 关闭
 
-# > 京东 (JD)
 jkds_enable = switch,true,false,tag=京东-脚本开关
-
-# > 淘宝 (Taobao)
 tcbc_enable = switch,true,false,tag=淘宝-脚本开关
+youtube_enable = switch,true,false,tag=YouTube-脚本开关
 
 
 [Rule]
 # >>>>>>>>>>>>>>> ✅ B ✅ <<<<<<<<<<<<<<
-# > 哔哩哔哩 (Bilibili)
+# > 哔哩哔哩
 DOMAIN,api.biliapi.com,REJECT
 DOMAIN,app.biliapi.com,REJECT
 DOMAIN,api.biliapi.net,REJECT
 DOMAIN,app.biliapi.net,REJECT
+# 开屏广告
 URL-REGEX, ^http:\/\/upos-sz-static\.bilivideo\.com\/ssaxcode\/\w{2}\/\w{2}\/\w{32}-1-SPLASH, REJECT-DICT
 URL-REGEX, ^http:\/\/[\d\.]+:8000\/v1\/resource\/\w{32}-1-SPLASH, REJECT-DICT
 
+# >>>>>>>>>>>>>>> ✅ F ✅ <<<<<<<<<<<<<<
+# > 番茄小说
+# hostname = *.pangolin-sdk-toutiao.com, *.pangolin-sdk-toutiao.*, *.pstatp.com, *.pstatp.com.*, *.pglstatp-toutiao.com.*, *.pglstatp-toutiao.com, gurd.snssdk.com, gurd.snssdk.com.*, i-lq.snssdk.com, i-lq.snssdk.com.*, *default.ixigua.com
+# 去章末广告
+URL-REGEX, ^https?:\/\/.+\.pangolin-sdk-toutiao\.com\/api\/ad\/union\/sdk\/(get_ads|stats|settings)\/, REJECT
+URL-REGEX, ^https?:\/\/.+\.pglstatp-toutiao\.com\/.+\/toutiao\.mp4, REJECT
+URL-REGEX, ^https?:\/\/.+\.(pglstatp-toutiao|pstatp)\.com\/(obj|img)\/(ad-app-package|ad)\/.+, REJECT
+URL-REGEX, ^https?:\/\/.+\.(pglstatp-toutiao|pstatp)\.com\/(obj|img)\/web\.business\.image\/.+, REJECT
+URL-REGEX, ^https?:\/\/.+\.(pglstatp-toutiao|pstatp)\.com\/obj\/ad-pattern\/renderer, REJECT
+URL-REGEX, ^https?:\/\/gurd\.snssdk\.com\/src\/server\/v3\/package, REJECT
+URL-REGEX, ^https?:\/\/.+\.byteimg.com\/tos-cn-i-1yzifmftcy\/(.+)-jpeg\.jpeg, REJECT
+URL-REGEX, ^https?:\/\/.+\.pstatp\.com\/obj\/mosaic-legacy\/.+\?from\=ad, REJECT
+URL-REGEX, ^https?:\/\/.+\.pstatp\.com\/bytecom\/resource\/track_log\/src\/.+, REJECT
+URL-REGEX, ^https?:\/\/.+\.snssdk\.com\/video\/play\/1\/toutiao\/.+\/mp4, REJECT
+URL-REGEX, ^https?:\/\/.+\.snssdk\.com\/api\/ad\/.+, REJECT
+URL-REGEX, ^https?:\/\/.+\.byteimg\.com\/ad-app-package, REJECT
+URL-REGEX, ^https?:\/\/.+\.byteimg\.com\/web\.business\.image, REJECT
+
+# >>>>>>>>>>>>>>> ✅ Y ✅ <<<<<<<<<<<<<<
+# > YouTube
+# hostname = rr*.googlevideo.com, youtubei.googleapis.com
+# 播放页广告
+URL-REGEX, ^https:\/\/rr[\w-]+\.googlevideo\.com\/initplayback\?, REJECT-DICT
+
+
+[Rewrite]
+# >>>>>>>>>>>>>>> ✅ B ✅ <<<<<<<<<<<<<<
+# > 哔哩哔哩
+# hostname = app.bilibili.com, api.bilibili.com, api.live.bilibili.com, grpc.biliapi.net
+^https:\/\/api\.live\.bilibili\.com\/xlive\/e-commerce-interface\/v1\/ecommerce-user\/get_shopping_info\? reject-dict
+^https:\/\/ap[ip]\.bilibili\.com\/x\/(?:resource\/(?:top\/activity|patch\/tab)|v2\/search\/square|vip\/ads\/materials)\? mock-response-body data-type=text status-code=200 data="{"code":-404,"message":"-404","ttl":1,"data":null}"
+^https:\/\/api\.bilibili\.com\/pgc\/activity\/deliver\/material\/receive\? mock-response-body data-type=text status-code=200 data="{"code":0,"data":{"closeType":"close_win","container":[],"showTime":""},"message":"success"}"
+^https:\/\/(?:grpc\.biliapi\.net|app\.bilibili\.com)\/bilibili\.app\.interface\.v1\.Teenagers\/ModeStatus$ mock-response-body data-type=base64 data="AAAAABMKEQgCEgl0ZWVuYWdlcnMgAioA" mock-data-is-base64=true
+^https:\/\/(?:grpc\.biliapi\.net|app\.bilibili\.com)\/bilibili\.app\.interface\.v1\.Search\/DefaultWords$ mock-response-body data-type=base64 data="AAAAACkaHeaQnOe0ouinhumikeOAgeeVquWJp+aIlnVw5Li7IgAoAToAQgBKAA==" mock-data-is-base64=true
+^https:\/\/(?:grpc\.biliapi\.net|app\.bilibili\.com)\/bilibili\.app\.view\.v1\.View\/TFInfo$ mock-response-body data-type=base64 data="AAAAAAIIAQ==" mock-data-is-base64=true
+^https:\/\/api\.bilibili\.com\/pgc\/view\/v2\/app\/season\? response-body-json-jq 'del(.data.payment)'
+^https:\/\/api\.bilibili\.com\/pgc\/page\/(?:bangumi|cinema\/tab)\? response-body-json-jq '.result.modules |= if . then map(if (.style | startswith("tip")) or (.module_id | IN(241, 1283, 1441, 1284)) then .items = [] elif .style | startswith("banner") then .items |= if . then map(select(.link | contains("play"))) else [] end elif .style | startswith("function") then .items |= if . then map(select(.blink | startswith("bilibili"))) else [] end end) end'
+^https:\/\/api\.live\.bilibili\.com\/xlive\/(?:app-interface\/v2\/index\/feed|app-room\/v1\/index\/getInfoBy(?:Room|User))\? response-body-json-jq '.data |= (del(.play_together_info, .play_together_info_v2, .activity_banner_info) | if .function_card then .function_card[] = null end | if .new_tab_info.outer_list then .new_tab_info.outer_list |= map(select(.biz_id != 33)) end | if .card_list then .card_list |= map(select(.card_type | IN("banner_v2", "activity_card_v1") | not)) end | reduce ([["show_reserve_status"], false], [["reserve_info", "show_reserve_status"], false], [["shopping_info", "is_show"], 0]) as [$path, $value] (.; if getpath($path) then setpath($path; $value) end))'
+^https:\/\/app\.bilibili\.com\/x\/resource\/show\/skin\? response-body-json-del data.common_equip
+^https:\/\/app\.bilibili\.com\/x\/resource\/show\/tab\/v2\? response-body-json-jq jq-path="https://raw.githubusercontent.com/kokoryh/Sparkle/refs/heads/master/jq/bilibili.tab.jq"
+^https:\/\/app\.bilibili\.com\/x\/v2\/splash\/(?:list|show|event\/list2)\? response-body-json-jq '.data |= with_entries(if .key | IN("show", "event_list") then .value = [] else . end)'
+^https:\/\/app\.bilibili\.com\/x\/v2\/feed\/index\? response-body-json-jq 'if .data.items then .data.items |= map(select((.banner_item == null) and (.ad_info == null) and (.card_goto == "av") and (.card_type | IN("small_cover_v2", "large_cover_single_v9", "large_cover_v1")))) end'
+^https:\/\/app\.bilibili\.com\/x\/v2\/feed\/index\/story\? response-body-json-jq 'if .data.items then .data.items |= map(select((.ad_info == null) and (.card_goto | startswith("ad") | not)) | del(.story_cart_icon, .free_flow_toast)) end'
+^https:\/\/app\.bilibili\.com\/x\/v2\/account\/mine(?:\/ipad)?\? response-body-json-jq jq-path="https://raw.githubusercontent.com/kokoryh/Sparkle/refs/heads/master/jq/bilibili.mine.jq"
+^https:\/\/app\.bilibili\.com\/x\/v2\/account\/myinfo\? response-body-json-jq '.data.vip |= if . != null and .status == 0 then . + { status: 1, type: 2, due_date: 9005270400000, role: 15 } else . end'
+
 # >>>>>>>>>>>>>>> ✅ J ✅ <<<<<<<<<<<<<<
-# > 京东 (JD)
+# > 京东
+# hostname = api.m.jd.com, dns.jd.com
+# 禁京东直播小窗
 ^https?:\/\/api\.m\.jd\.com\/client\.action\?functionId=getWidgetV1052 reject
 
+# >>>>>>>>>>>>>>> ✅ M ✅ <<<<<<<<<<<<<<
+# > 猫耳FM
+# hostname = app.missevan.com
+# 开屏广告 感谢【可莉🅥】分享
+^https?:\/\/app\.missevan\.com\/site\/launch\? reject
+
 # >>>>>>>>>>>>>>> ✅ T ✅ <<<<<<<<<<<<<<
-# > 淘宝 (Taobao)
+# > 淘宝
+# hostname = acs.m.taobao.com, guide-acs.m.taobao.com, poplayer.template.alibaba.com
 ^https?:\/\/acs\.m\.taobao\.com\/gw\/mtop\.alibaba\.advertisementservice\.getadv reject-dict
 ^https?:\/\/acs\.m\.taobao\.com\/gw\/mtop\.alimama\.etao\.config\.query\/.+?etao_advertise reject-dict
 ^https?:\/\/acs\.m\.taobao\.com\/gw\/mtop\.alimusic\.common\.mobileservice\.startinit reject-dict
@@ -64,60 +98,28 @@ URL-REGEX, ^http:\/\/[\d\.]+:8000\/v1\/resource\/\w{32}-1-SPLASH, REJECT-DICT
 ^https?:\/\/acs\.m\.taobao\.com\/gw\/mtop\.trip\.activity\.querytmsresources reject-dict
 ^https?:\/\/guide-acs\.m\.taobao\.com\/gw\/mtop\.taobao\.(volvo\.secondfloor\.getconfig|wireless\.home\.newface\.awesome\.get) reject-dict
 
-# > 番茄小说 (Tomato Novel)
-^https?:\/\/.+\.pangolin-sdk-toutiao\.com\/api\/ad\/union\/sdk\/(get_ads|stats|settings)\/ reject
-^https?:\/\/.+\.pglstatp-toutiao\.com\/.+\/toutiao\.mp4 reject
-^https?:\/\/.+\.(pglstatp-toutiao|pstatp)\.com\/(obj|img)\/(ad-app-package|ad)\/.+ reject
-^https?:\/\/.+\.(pglstatp-toutiao|pstatp)\.com\/(obj|img)\/web\.business\.image\/.+ reject
-^https?:\/\/.+\.(pglstatp-toutiao|pstatp)\.com\/obj\/ad-pattern\/renderer reject
-^https?:\/\/gurd\.snssdk\.com\/src\/server\/v3\/package reject
-^https?:\/\/.+\.byteimg\.com\/tos-cn-i-1yzifmftcy\/(.+)-jpeg\.jpeg reject
-^https?:\/\/.+\.pstatp\.com\/obj\/mosaic-legacy\/.+\?from\=ad reject
-^https?:\/\/.+\.pstatp\.com\/bytecom\/resource\/track_log\/src\/.+ reject
-^https?:\/\/.+\.snssdk\.com\/video\/play\/1\/toutiao\/.+\/mp4 reject
-^https?:\/\/.+\.snssdk\.com\/api\/ad\/.+ reject
-^https?:\/\/.+\.byteimg\.com\/ad-app-package reject
-^https?:\/\/.+\.byteimg\.com\/web\.business\.image reject
-
-
-[Rewrite]
-# >>>>>>>>>>>>>>> ✅ B ✅ <<<<<<<<<<<<<<
-# > 哔哩哔哩 (Bilibili)
-^https:\/\/api\.live\.bilibili\.com\/xlive\/e-commerce-interface\/v1\/ecommerce-user\/get_shopping_info\? reject-dict
-^https:\/\/ap[ip]\.bilibili\.com\/x\/(?:resource\/(?:top\/activity|patch\/tab)|v2\/search\/square|vip\/ads\/materials)\? mock-response-body data-type=text status-code=200 data="{"code":-404,"message":"-404","ttl":1,"data":null}"
-^https:\/\/(?:grpc\.biliapi\.net|app\.bilibili\.com)\/bilibili\.app\.interface\.v1\.Teenagers\/ModeStatus$ mock-response-body data-type=base64 data="AAAAABMKEQgCEgl0ZWVuYWdlcnMgAioA" mock-data-is-base64=true
-^https:\/\/(?:grpc\.biliapi\.net|app\.bilibili\.com)\/bilibili\.app\.interface\.v1\.Search\/DefaultWords$ mock-response-body data-type=base64 data="AAAAACkaHeaQnOe0ouinhumikeOAgeeVquWJp+aIlnVw5Li7IgAoAToAQgBKAA==" mock-data-is-base64=true
-^https:\/\/(?:grpc\.biliapi\.net|app\.bilibili\.com)\/bilibili\.app\.view\.v1\.View\/TFInfo$ mock-response-body data-type=base64 data="AAAAAAIIAQ==" mock-data-is-base64=true
-^https:\/\/api\.live\.bilibili\.com\/xlive\/(?:app-interface\/v2\/index\/feed|app-room\/v1\/index\/getInfoBy(?:Room|User))\? response-body-json-jq '.data |= (del(.play_together_info, .play_together_info_v2, .activity_banner_info) | if .function_card then .function_card[] = null end | if .new_tab_info.outer_list then .new_tab_info.outer_list |= map(select(.biz_id != 33)) end | if .card_list then .card_list |= map(select(.card_type | IN("banner_v2", "activity_card_v1") | not)) end | reduce ([["show_reserve_status"], false], [["reserve_info", "show_reserve_status"], false], [["shopping_info", "is_show"], 0]) as [$path, $value] (.; if getpath($path) then setpath($path; $value) end))'
-^https:\/\/app\.bilibili\.com\/x\/resource\/show\/skin\? response-body-json-del data.common_equip
-^https:\/\/app\.bilibili\.com\/x\/resource\/show\/tab\/v2\? response-body-json-jq jq-path="https://raw.githubusercontent.com/kokoryh/Sparkle/refs/heads/master/jq/bilibili.tab.jq"
-^https:\/\/app\.bilibili\.com\/x\/v2\/splash\/(?:list|show|event\/list2)\? response-body-json-jq '.data |= with_entries(if .key | IN("show", "event_list") then .value = [] else . end)'
-^https:\/\/app\.bilibili\.com\/x\/v2\/feed\/index\? response-body-json-jq 'if .data.items then .data.items |= map(select((.banner_item == null) and (.ad_info == null) and (.card_goto == "av") and (.card_type | IN("small_cover_v2", "large_cover_single_v9", "large_cover_v1")))) end'
-^https:\/\/app\.bilibili\.com\/x\/v2\/feed\/index\/story\? response-body-json-jq 'if .data.items then .data.items |= map(select((.ad_info == null) and (.card_goto | startswith("ad") | not)) | del(.story_cart_icon, .free_flow_toast)) end'
-^https:\/\/app\.bilibili\.com\/x\/v2\/account\/mine(?:\/ipad)?\? response-body-json-jq jq-path="https://raw.githubusercontent.com/kokoryh/Sparkle/refs/heads/master/jq/bilibili.mine.jq"
-^https:\/\/app\.bilibili\.com\/x\/v2\/account\/myinfo\? response-body-json-jq '.data.vip |= if . != null and .status == 0 then . + { status: 1, type: 2, due_date: 9005270400000, role: 15 } else . end'
-
-# >>>>>>>>>>>>>>> ✅ M ✅ <<<<<<<<<<<<<<
-# > 猫耳FM (Cat Ear FM)
-^https?:\/\/app\.missevan\.com\/site\/launch\? reject
-
 
 [Script]
 # >>>>>>>>>>>>>>> ✅ B ✅ <<<<<<<<<<<<<<
-# > 哔哩哔哩 (Bilibili)
+# > 哔哩哔哩
 http-request ^https:\/\/(?:grpc\.biliapi\.net|app\.bilibili\.com)\/bilibili\.app\.playerunite\.v1\.Player\/PlayViewUnite$ script-path=https://raw.githubusercontent.com/kokoryh/Sparkle/refs/heads/master/dist/bilibili.airborne.js, requires-body=true, binary-body-mode=true, enable={airborne}, tag=bilibili.airborne
 http-request ^https:\/\/(?:grpc\.biliapi\.net|app\.bilibili\.com)\/bilibili\.community\.service\.dm\.v1\.DM\/DmSegMobile$ script-path=https://raw.githubusercontent.com/kokoryh/Sparkle/refs/heads/master/dist/bilibili.airborne.js, requires-body=true, binary-body-mode=true, enable={airborneDm}, tag=bilibili.airborneDm
-http-response ^https:\/\/(?:grpc\.biliapi\.net|app\.bilibili\.com)\/bilibili\.(?:app\.(?:show\.v1\.Popular\/Index|dynamic\.v2\.Dynamic\/DynAll|view(?:unite)?\.v1\.View\/(?:View|ViewProgress|RelatesFeed)|playurl\.v1\.PlayURL\/PlayView)|polymer\.app\.search\.v1\.Search\/SearchAll|community\.service\.dm\.v1\.DM\/DmView|main\.community\.reply\.v1\.Reply\/MainList)$ script-path=https://raw.githubusercontent.com/kokoryh/Sparkle/refs/heads/master/dist/bilibili.protobuf.js, argument=[{showUpList}, {filterTopReplies}, {airborneDm}], requires-body=true, binary-body-mode=true, tag=bilibili.protobuf
+http-response ^https:\/\/(?:grpc\.biliapi\.net|app\.bilibili\.com)\/bilibili\.(?:app\.(?:show\.v1\.Popular\/Index|dynamic\.v2\.Dynamic\/DynAll|view(?:unite)?\.v1\.View\/(?:View|ViewProgress|RelatesFeed)|playurl\.v1\.PlayURL\/PlayView|playerunite\.v1\.Player\/PlayViewUnite)|polymer\.app\.search\.v1\.Search\/SearchAll|community\.service\.dm\.v1\.DM\/DmView|main\.community\.reply\.v1\.Reply\/MainList|pgc\.gateway\.player\.v2\.PlayURL\/PlayView)$ script-path=https://raw.githubusercontent.com/kokoryh/Sparkle/refs/heads/master/dist/bilibili.protobuf.js, argument=[{showUpList}, {filterTopReplies}, {airborneDm}], requires-body=true, binary-body-mode=true, tag=bilibili.protobuf
 
 # >>>>>>>>>>>>>>> ✅ J ✅ <<<<<<<<<<<<<<
-# > 京东 (JD)
+# > 京东
 http-response ^https:\/\/api\.m\.jd\.com\/client\.action\?functionId=(deliverLayer|getTabHomeInfo|myOrderInfo|orderTrackBusiness|personinfoBusiness|start|welcomeHome) script-path=https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/jingdong/jingdong.js, requires-body=true, timeout=60, tag=京东, enable={jkds_enable}
 
 # >>>>>>>>>>>>>>> ✅ T ✅ <<<<<<<<<<<<<<
-# > 淘宝 (Taobao)
+# > 淘宝
 http-response ^https?:\/\/guide-acs\.m\.taobao\.com\/gw\/mtop\.taobao\.(cloudvideo\.video\.query|wireless\.home\.splash\.awesome\.get) script-path=https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/myBlockAds.js, requires-body=true, timeout=60, tag=淘宝, enable={tcbc_enable}
 http-response ^https?:\/\/poplayer\.template\.alibaba\.com\/\w+\.json script-path=https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/myBlockAds.js, requires-body=true, timeout=60, tag=淘宝, enable={tcbc_enable}
 
+# >>>>>>>>>>>>>>> ✅ Y ✅ <<<<<<<<<<<<<<
+# > YouTube
+# 响应体
+http-response ^https:\/\/youtubei\.googleapis\.com\/youtubei\/v1\/(browse|next|player|search|reel\/reel_watch_sequence|guide|account\/get_setting|get_watch) script-path=https://raw.githubusercontent.com/Maasea/sgmodule/refs/heads/master/Script/Youtube/youtube.response.js, requires-body=true, binary-body-mode=true, timeout=60, tag=YouTube响应体, enable={youtube_enable}
+
 
 [MITM]
-hostname = *.pangolin-sdk-toutiao.com, *.pangolin-sdk-toutiao.*, *.pstatp.com, *.pstatp.com.*, *.pglstatp-toutiao.com.*, *.pglstatp-toutiao.com, gurd.snssdk.com, gurd.snssdk.com.*, i-lq.snssdk.com, i-lq.snssdk.com.*, *default.ixigua.com, app.missevan.com, app.bilibili.com, api.bilibili.com, api.live.bilibili.com, grpc.biliapi.net, api.m.jd.com, dns.jd.com, acs.m.taobao.com, guide-acs.m.taobao.com, poplayer.template.alibaba.com
+hostname = *.byteimg.com.*, *.pangolin-sdk-toutiao.com, *.pangolin-sdk-toutiao.*, *.pglstatp-toutiao.com, *.pglstatp-toutiao.com.*, *.pstatp.com, *.pstatp.com.*, *default.ixigua.com, acs.m.taobao.com, api.biliapi.com, api.biliapi.net, api.bilibili.com, api.live.bilibili.com, api.m.jd.com, app.biliapi.com, app.biliapi.net, app.bilibili.com, app.missevan.com, dns.jd.com, gurd.snssdk.com, gurd.snssdk.com.*, guide-acs.m.taobao.com, grpc.biliapi.net, i-lq.snssdk.com, i-lq.snssdk.com.*, poplayer.template.alibaba.com, rr*.googlevideo.com, snssdk.com, youtubei.googleapis.com
